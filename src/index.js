@@ -919,6 +919,18 @@ export function index(){
                     <span id="pausegame"></span>
                 </span>
             </span>
+            <span class="modControls">
+                <span class="speedControls">
+                    <span v-for="sp in [1,2,4,10]" :key="sp"
+                        role="button" class="speedBtn" :class="{ active: s.gameSpeed === sp }"
+                        @click="setSpeed(sp)">{{ sp }}x</span>
+                </span>
+                <span class="autoClickControls">
+                    <span v-for="r in [1,10,25,100]" :key="r"
+                        role="button" class="speedBtn" :class="{ active: s.autoClickRate === r }"
+                        @click="setAutoClick(r)">{{ r }}/s</span>
+                </span>
+            </span>
         </span>
         <span class="version" id="versionLog"><a href="wiki.html#changelog" target="_blank"></a></span>
     </div>`);

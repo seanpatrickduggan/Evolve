@@ -152,6 +152,10 @@ export function loopTimers(){
         modifier *= 1 - (traits.hyper.vars()[0] / 100);
     }
 
+    // Game speed multiplier (1x, 2x, 4x, 10x).
+    let speedMult = global.settings.gameSpeed || 1;
+    modifier /= speedMult;
+
     // Main loop takes 250ms without any modifiers.
     const webWorkerMainTimer = Math.floor(250 * modifier);
     // Mid loop takes 1000ms without any modifiers.

@@ -1358,6 +1358,14 @@ if (!global.settings.hasOwnProperty('touch')){
     global.settings['touch'] = false;
 }
 
+if (!global.settings.hasOwnProperty('gameSpeed')){
+    global.settings['gameSpeed'] = 1;
+}
+
+if (!global.settings.hasOwnProperty('autoClickRate')){
+    global.settings['autoClickRate'] = 10;
+}
+
 if (!global.settings.hasOwnProperty('lowPowerBalance')){
     global.settings['lowPowerBalance'] = false;
 }

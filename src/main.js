@@ -167,6 +167,39 @@ $(document).mousemove(function(e){
     });
 });
 
+// Auto-click: hold mousedown on action buttons to repeat clicks
+var autoClickInterval = null;
+function stopAutoClick(){
+    if (autoClickInterval !== null){
+        clearInterval(autoClickInterval);
+        autoClickInterval = null;
+    }
+}
+function findVueAction(el){
+    // Vue is bound to the parent .action div, not the <a> button itself
+    let node = el;
+    for (let i = 0; i < 5 && node; i++){
+        if (node.__vue__ && typeof node.__vue__.action === 'function'){
+            return node.__vue__;
+        }
+        node = node.parentElement;
+    }
+    return null;
+}
+$(document).on('mousedown', '.button.is-dark', function(e){
+    if (e.button !== 0) return; // left click only
+    let vue = findVueAction(this);
+    if (!vue) return;
+    stopAutoClick();
+    let rate = global.settings.autoClickRate || 10;
+    autoClickInterval = setInterval(function(){
+        if (vue && typeof vue.action === 'function'){
+            vue.action();
+        }
+    }, 1000 / rate);
+});
+$(document).on('mouseup mouseleave', stopAutoClick);
+
 index();
 var revision = global['revision'] ? global['revision'] : '';
 if (global['beta']){
@@ -565,6 +598,16 @@ vBind({
         },
         atRemain(){
             return loc(`accelerated_time`);
+        },
+        setSpeed(sp){
+            global.settings.gameSpeed = sp;
+            if (webWorker.s){
+                gameLoop('stop');
+                gameLoop('start');
+            }
+        },
+        setAutoClick(rate){
+            global.settings.autoClickRate = rate;
         },
         pause(){
             $(`#pausegame`).removeClass('play');
